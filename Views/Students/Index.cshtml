@@ -1,0 +1,84 @@
+﻿@model IEnumerable<StudentAdmissionManagement.Student>
+
+@{
+    ViewBag.Title = "Index";
+    List<Student_Status> lstStatus = new StudentAdmissionManagement.Models.BLStudents().GetStudentStatusList();
+    List<Course> lstCourses = new StudentAdmissionManagement.Models.BLCourses().GetCoursesList().ToList();
+    int noofRecords = 0;
+    string searchText = string.Empty;
+}
+
+<h2>Students</h2>
+<br />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Age
+        </th>
+        <th>
+            Gender
+        </th>
+        <th>
+            Date Of Birth
+        </th>
+        <th>
+            Course
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            @using (Html.BeginForm("Index", "Students", FormMethod.Get))
+            {
+                @Html.TextBoxFor(m => searchText, new { @placeholder = "Enter text to search", @htmlAttributes = new { @width = "98%" } })
+                <input type="submit" value="Search" />
+            }
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        noofRecords++;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.stuName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stuAge)
+            </td>
+            <td>
+                @if (item.stuGender.ToLower() == "m")
+                {
+                    <span>Male</span>
+                }
+                else
+                {
+                    <span>Female</span>
+                }
+            </td>
+            <td>
+                @item.stuDOB.ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                @lstCourses.Where(e => e.coId == item.stuCourseId).SingleOrDefault().coName
+            </td>
+            <td>
+                @lstStatus.Where(e => e.ssId == item.stuStatus).SingleOrDefault().ssName
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.stuId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.stuId })
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="100%" style="font-weight: bold;" align="center">Total Records : @noofRecords.ToString()</td>
+    </tr>
+
+</table>

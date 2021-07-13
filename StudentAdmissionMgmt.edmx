@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="StudentAdmissionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Course_Status">
+          <Key>
+            <PropertyRef Name="csId" />
+          </Key>
+          <Property Name="csId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="csName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="coId" />
+          </Key>
+          <Property Name="coId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="coName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="coNoOfSems" Type="smallint" Nullable="false" />
+          <Property Name="coStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student_Status">
+          <Key>
+            <PropertyRef Name="ssId" />
+          </Key>
+          <Property Name="ssId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ssName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Students">
+          <Key>
+            <PropertyRef Name="stuId" />
+          </Key>
+          <Property Name="stuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stuName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="stuAge" Type="smallint" Nullable="false" />
+          <Property Name="stuGender" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="stuDOB" Type="datetime" Nullable="false" />
+          <Property Name="stuStatus" Type="int" Nullable="false" />
+          <Property Name="stuCourseId" Type="int" Nullable="false" />
+          <Property Name="stuSuspendTillDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Courses_ToTable">
+          <End Role="Course_Status" Type="Self.Course_Status" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course_Status">
+              <PropertyRef Name="csId" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="coStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Students_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="coId" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="stuCourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Students_Student_Status">
+          <End Role="Student_Status" Type="Self.Student_Status" Multiplicity="1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student_Status">
+              <PropertyRef Name="ssId" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="stuStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StudentAdmissionModelStoreContainer">
+          <EntitySet Name="Course_Status" EntityType="Self.Course_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student_Status" EntityType="Self.Student_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Courses_ToTable" Association="Self.FK_Courses_ToTable">
+            <End Role="Course_Status" EntitySet="Course_Status" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Students_Courses" Association="Self.FK_Students_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Students_Student_Status" Association="Self.FK_Students_Student_Status">
+            <End Role="Student_Status" EntitySet="Student_Status" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StudentAdmissionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Course_Status">
+          <Key>
+            <PropertyRef Name="csId" />
+          </Key>
+          <Property Name="csId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="csName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_ToTable" FromRole="Course_Status" ToRole="Courses" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="coId" />
+          </Key>
+          <Property Name="coId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="coName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="coNoOfSems" Type="Int16" Nullable="false" />
+          <Property Name="coStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Course_Status" Relationship="Self.FK_Courses_ToTable" FromRole="Courses" ToRole="Course_Status" />
+          <NavigationProperty Name="Students" Relationship="Self.FK_Students_Courses" FromRole="Courses" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="Student_Status">
+          <Key>
+            <PropertyRef Name="ssId" />
+          </Key>
+          <Property Name="ssId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ssName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Students" Relationship="Self.FK_Students_Student_Status" FromRole="Student_Status" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="stuId" />
+          </Key>
+          <Property Name="stuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="stuAge" Type="Int16" Nullable="false" />
+          <Property Name="stuGender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="stuDOB" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="stuStatus" Type="Int32" Nullable="false" />
+          <Property Name="stuCourseId" Type="Int32" Nullable="false" />
+          <Property Name="stuSuspendTillDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Course" Relationship="Self.FK_Students_Courses" FromRole="Students" ToRole="Courses" />
+          <NavigationProperty Name="Student_Status" Relationship="Self.FK_Students_Student_Status" FromRole="Students" ToRole="Student_Status" />
+        </EntityType>
+        <Association Name="FK_Courses_ToTable">
+          <End Role="Course_Status" Type="Self.Course_Status" Multiplicity="1" />
+          <End Role="Courses" Type="StudentAdmissionModel.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course_Status">
+              <PropertyRef Name="csId" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="coStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Students_Courses">
+          <End Role="Courses" Type="StudentAdmissionModel.Course" Multiplicity="1" />
+          <End Role="Students" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="coId" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="stuCourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Students_Student_Status">
+          <End Role="Student_Status" Type="Self.Student_Status" Multiplicity="1" />
+          <End Role="Students" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student_Status">
+              <PropertyRef Name="ssId" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="stuStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StudentAdmissionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Course_Status" EntityType="Self.Course_Status" />
+          <EntitySet Name="Courses" EntityType="StudentAdmissionModel.Course" />
+          <EntitySet Name="Student_Status" EntityType="Self.Student_Status" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <AssociationSet Name="FK_Courses_ToTable" Association="Self.FK_Courses_ToTable">
+            <End Role="Course_Status" EntitySet="Course_Status" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Students_Courses" Association="Self.FK_Students_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Students_Student_Status" Association="Self.FK_Students_Student_Status">
+            <End Role="Student_Status" EntitySet="Student_Status" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StudentAdmissionModelStoreContainer" CdmEntityContainer="StudentAdmissionEntities">
+          <EntitySetMapping Name="Course_Status">
+            <EntityTypeMapping TypeName="StudentAdmissionModel.Course_Status">
+              <MappingFragment StoreEntitySet="Course_Status">
+                <ScalarProperty Name="csId" ColumnName="csId" />
+                <ScalarProperty Name="csName" ColumnName="csName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="StudentAdmissionModel.Course">
+              <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="coId" ColumnName="coId" />
+                <ScalarProperty Name="coName" ColumnName="coName" />
+                <ScalarProperty Name="coNoOfSems" ColumnName="coNoOfSems" />
+                <ScalarProperty Name="coStatus" ColumnName="coStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Student_Status">
+            <EntityTypeMapping TypeName="StudentAdmissionModel.Student_Status">
+              <MappingFragment StoreEntitySet="Student_Status">
+                <ScalarProperty Name="ssId" ColumnName="ssId" />
+                <ScalarProperty Name="ssName" ColumnName="ssName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="StudentAdmissionModel.Student">
+              <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="stuId" ColumnName="stuId" />
+                <ScalarProperty Name="stuName" ColumnName="stuName" />
+                <ScalarProperty Name="stuAge" ColumnName="stuAge" />
+                <ScalarProperty Name="stuGender" ColumnName="stuGender" />
+                <ScalarProperty Name="stuDOB" ColumnName="stuDOB" />
+                <ScalarProperty Name="stuStatus" ColumnName="stuStatus" />
+                <ScalarProperty Name="stuCourseId" ColumnName="stuCourseId" />
+                <ScalarProperty Name="stuSuspendTillDate" ColumnName="stuSuspendTillDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

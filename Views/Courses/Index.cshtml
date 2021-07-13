@@ -1,0 +1,44 @@
+﻿@model IEnumerable<StudentAdmissionManagement.Course>
+
+@{
+    ViewBag.Title = "Index";
+    List<Course_Status> lstStatus = new StudentAdmissionManagement.Models.BLCourses().GetCourseStatusList();
+    int noofRecords = 0;
+    string searchText = string.Empty;
+}
+
+<h2>Courses</h2>
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            No of Semesters
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        noofRecords++;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.coName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.coNoOfSems)
+            </td>
+            <td>
+                @lstStatus.Where(e => e.csId == item.coStatus).SingleOrDefault().csName
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="100%" style="font-weight: bold;" align="center">Total Records : @noofRecords.ToString()</td>
+    </tr>
+</table>

@@ -1,0 +1,90 @@
+﻿@model StudentAdmissionManagement.Student
+@{
+    ViewBag.Title = "Add Student";
+    List<Student_Status> lstStatus = new StudentAdmissionManagement.Models.BLStudents().GetStudentStatusList();
+    List<Course> lstCourses = new StudentAdmissionManagement.Models.BLCourses().GetCoursesList().Where(e => e.coStatus == 1).OrderBy(e => e.coName).ToList();
+}
+
+<h2>Add Student</h2>
+<br />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Student</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.stuName, new { htmlAttributes = new { @class = "form-control", @required = "true" } })
+                @Html.ValidationMessageFor(model => model.stuName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Gender", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButtonFor(model => model.stuGender, "m", new { @checked = "true" }) Male &nbsp;
+                @Html.RadioButtonFor(model => model.stuGender, "f") Female
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Date Of Birth", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.stuDOB, new { htmlAttributes = new { @class = "form-control", @type = "date", @required = "true" } })
+                @Html.ValidationMessageFor(model => model.stuDOB, "This field is required.", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.stuStatus, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("stuStatus", lstStatus.Select(e => new SelectListItem { Value = e.ssId.ToString(), Text = e.ssName }), htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.stuCourseId, "Course", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("stuCourseId", lstCourses.Select(e => new SelectListItem { Value = e.coId.ToString(), Text = e.coName }), htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div id="divSuspendDate" class="form-group" style="display: none;">
+            @Html.LabelFor(model => model.stuSuspendTillDate, "Suspend Till", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.stuSuspendTillDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $("#stuStatus").change(function () {
+            debugger;
+            console.log(this);
+            $("#divSuspendDate").css("display", "none");
+            $("#stuSuspendTillDate").attr("required", "false");
+            if (this.value == 6) {
+                $("#divSuspendDate").css("display", "block");
+                $("#stuSuspendTillDate").attr("required", "true");
+            }
+        });
+    </script>
+}
