@@ -30,7 +30,7 @@ namespace StudentAdmissionManagement.Models
                     objStudentUpdate.stuStatus = student.stuStatus;
                     objStudentUpdate.stuCourseId = student.stuCourseId;
                     objStudentUpdate.stuSuspendTillDate = null;
-                    if (student.stuStatus == 6)
+                    if (student.stuStatus == 2) //Will be replaced by Enums
                         objStudentUpdate.stuSuspendTillDate = student.stuSuspendTillDate;
                     ctx.Entry(objStudentUpdate).State = System.Data.Entity.EntityState.Modified;
                 }
